@@ -1,0 +1,51 @@
+import pyautogui
+import time
+import pyperclip
+
+# 좌표 설정
+x = 1278
+y = 618
+
+# 이전에 복사한 내용을 저장할 변수
+last_copied_line = None
+
+while True:
+    # 좌표로 마우스 이동
+    pyautogui.moveTo(x, y)
+
+    # 마우스 클릭
+    pyautogui.click()
+    pyautogui.hotkey('command', 'a')
+    pyautogui.hotkey('command', 'c')
+
+    # 클립보드에 내용이 복사될 시간을 주기 위해 잠시 대기
+    time.sleep(1)
+
+    # 클립보드의 현재 내용 가져오기
+    current_content = pyperclip.paste()
+    
+    # 내용을 줄 단위로 나누기
+    lines = current_content.split('\n')
+    # 처음 실행 시, 전체 내용 출력
+    if last_copied_line is None:
+        print("처음 복사된 내용:\n", current_content)
+        last_copied_line = lines[-2] if lines else ""
+        print("마지막줄",last_copied_line)
+    else:
+        # 새로운 내용이 복사된 경우
+        if last_copied_line != lines[-2]:
+            print("새롭게 복사:\n", current_content)
+            last_copied_line = lines[-2] if lines else ""
+            print("마지막줄",last_copied_line)
+            last_line_index = lines.index(last_copied_line)
+            print("인덱스", last_line_index)
+            new_content = '\n'.join(lines[last_line_index:])
+            print("뉴콘틴트",new_content)
+            if new_content.strip():
+                print("새로운 내용:\n", new_content)
+
+    # 현재 내용의 마지막 줄을 기억
+    last_copied_line = lines[-2] if lines else ""
+
+    # 잠시 대기ac
+    time.sleep(5)  # 5초 대기
